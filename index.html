@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap');
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background-image: url('https://www.transparenttextures.com/patterns/diagonal-striped-brick.png');
+  background-color: var(--bg-color);
+  background-blend-mode: lighten;
+  color: var(--text-color);
+  font-family: 'Edu TAS Beginner', cursive;
+  padding: 10px; /* Add padding to the body */
+}
+
+.topscreen {
+	position: absolute;
+	top: 5%;
+	align-items: center;
+	font-size: 4rem;
+	margin: 0;
+}
+
+.fontrow{
+	display:flex;
+	flex-direction:row;
+	}
+	
+.fontrow #resetBtn{
+	background-color: rgb(2,3,129);
+	color: white;
+	}
+	
+#mySelect {
+  width: 100%;
+  height: 95%
+}
+
+.select-container button {
+	display:flex;
+}
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin: 10px 10px;
+}
+
+select, input, button {
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 5px;
+  margin: 10px 10px;
+}
+/* Default to light mode */
+:root {
+    --bg-color: "light blue";
+    --text-color: rgb(2,3,129);
+}
+
+/* Dark mode */
+[data-theme="dark"] {
+    --bg-color: black;
+    --text-color: #ff5a00;;
+}
+
+#darkModeToggle {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  font-size: 18px;
+  border-radius: 50%;
+}
+#increaseFont{
+	margin: 10px 10px;
+	}
+	
+#decreaseFont{
+	margin: 10px 10px;
+	}
+	
+#itemInput {
+	width: 50%
+	}
+	
+button {
+    background-color: rgba(255,105,0,1);
+	}
+
+.breakdance-image-object{
+		position: absolute;
+		top: 15%;
+		height: 13%;
+		width:25%;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		padding-top: 0;
+		}
+.saveAs{
+	display:flex;
+	flex-direction:row;
+	margin: 10px;
+	}
+</style>
+</head>
+<body>
+<button id="darkModeToggle">Dark</button> <!-- Moved to top left corner -->
+<h1 class="topscreen">Normans Friend</h1>
+<img class="breakdance-image-object" src="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png" width="600" height="227" alt="Nimble Group" srcset="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png 600w, https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white-300x114.png 300w" sizes="(max-width: 600px) 100vw, 600px">
+
+<div class="select-container">
+<div class="fontrow">
+<button id="increaseFont">+</button> <!-- Placed next to each other -->
+<button id="decreaseFont">-</button>
+<button id="resetBtn">Reset</button>
+</div>
+<select id="mySelect" multiple>
+	<option value="1">👉 Good day ..How are you?[ Just click on each line in order to highlight it! ]</option>
+	<option value="2">We are calling on behalf of... from The Nimble group.</option>
+	<option value="3">Confirm full name.. { This call is recorded for your own protection }</option>
+	<option value="4">and You are speaking to.. one of the resolution consultants</option>
+	<option value="4">Your account has been allocated to me and the reason for this call..</option>
+	<option value="5">Unfortunately your __account still has an outstanding balance</option>
+	<option value="6">And we want you to be debt_free and clear your name from the credit_bureau ...ASAP</option>
+	<option value="7">👉 [ use Norman PI ] [ !get date of birth, !Balance ]</option>
+	<option value="8">So, just to understand your situation better & help you find a solution to this</option>
+	<option value="9">What is making it difficult for you to settle [ arrangements, payments ]?</option>
+	<option value="10">I really need you to stay on the line with me</option>
+	<option value="11">Benefits(Improve credit_score [ monthly_payments ]</option>
+	<option value="12">Consequences( negatively affect credit_score, could stand in the way of getting employed )</option>
+	<option value="13">There is a Limited Special Settlement Offer: Save money💵💰 and clear your name!!!</option>
+	<option value="14">Go for the debit order, Get the salary date</option>
+	<option value="15">Which bank are you using now? {{ check if interest free applies. }}</option>
+	<option value="16">Can you check the debi_check to make sure everything is as we agreed upon?</option>
+	<option value="17">You are welcome to make an extra payment today or tomorrow to help bring your balance down</option>
+	<option value="18">Benefits of the Nimble pay app {{ cost-effective and convenient }}</option>
+	<option value="19">Update personal details {{ Phone, Email, Address }}</option>
+	<option value="20">Are you happy with the arrangement? {{ confirm the arrangement.. }}</option>
+	<option value="21">Update history-notes on system</option>
+	<option value="22">Any questions from your side?</option>
+</select>
+
+<div class="input-container">
+<input type="text" id="itemInput" placeholder="Enter item text">
+<button id="addItem">Add Item</button>
+<button id="deleteItem">Delete Item</button>
+</div>
+<form class="saveAs">
+  <label for="input">Enter text:</label>
+  <input type="text" id="input" name="input"><br><br>
+  <button onclick="saveTextAsFile()">Save</button>
+</form>
+</div>
+<script>
+var select = document.getElementById("mySelect");
+
+function updateOptions() {
+    Array.from(select.options).forEach(function(option) {
+        option.onmousedown = function(event) {
+            event.preventDefault();
+            var scroll_offset = select.scrollTop;
+            this.selected = !this.selected;
+            select.scrollTop = scroll_offset;
+
+            var allSelected = Array.from(select.options).every(function(option) {
+                return option.selected;
+            });
+
+            if (allSelected) {
+                alert("You have selected all the items");
+                Array.from(select.options).forEach(function(option) {
+                    option.selected = false;
+                });
+            }
+        };
+
+        option.onmousemove = function(event) {
+            event.preventDefault();
+        };
+    });
+}
+
+updateOptions();
+
+document.getElementById("darkModeToggle").addEventListener("click", function() {
+    var currentTheme = document.documentElement.getAttribute("data-theme");
+
+    if (currentTheme === "dark") {
+        document.documentElement.setAttribute("data-theme", "light");
+        this.textContent = "Dark";
+    } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        this.textContent = "Light";
+    }
+});
+
+document.getElementById("increaseFont").addEventListener("click", function() {
+    select.style.fontSize = (parseFloat(getComputedStyle(select).fontSize) + 1) + "px";
+});
+
+document.getElementById("decreaseFont").addEventListener("click", function() {
+    select.style.fontSize = (parseFloat(getComputedStyle(select).fontSize) - 1) + "px";
+});
+
+document.getElementById("addItem").addEventListener("click", function() {
+    var itemInput = document.getElementById("itemInput");
+    if (itemInput.value.trim() !== "") {
+        var newItem = document.createElement("option");
+        newItem.text = itemInput.value;
+        select.add(newItem);
+        itemInput.value = "";
+        updateOptions();
+    }
+});
+
+document.getElementById("deleteItem").addEventListener("click", function() {
+    Array.from(select.options).forEach(function(option) {
+        if (option.selected) {
+            select.remove(option.index);
+        }
+    });
+});
+
+document.getElementById("resetSelect").addEventListener("click", function() {
+    Array.from(select.options).forEach(function(option) {
+        option.selected = false;
+    });
+});
+function saveTextAsFile() {
+  var textToSave = document.getElementById("input").value;
+  var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
+  var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
+  var fileNameToSaveAs = "input.txt";
+ 
+  var downloadLink = document.createElement("a");
+  downloadLink.download = fileNameToSaveAs;
+  downloadLink.innerHTML = "Download File";
+  downloadLink.href = textToSaveAsURL;
+  downloadLink.onclick = destroyClickedElement;
+  downloadLink.style.display = "none";
+  document.body.appendChild(downloadLink);
+ 
+  downloadLink.click();
+}
+ 
+function destroyClickedElement(event) {
+  document.body.removeChild(event.target);
+}
+</script>
+</body>
+</html>
+
+
+<!--
+
+Just incase
+-->
