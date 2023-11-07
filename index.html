@@ -110,6 +110,16 @@ button {
 	flex-direction:row;
 	margin: 10px;
 	}
+#reminder-list {
+            list-style-type: none;
+            padding: 0;
+        }
+.reminder-item {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+}
 </style>
 </head>
 <body>
@@ -159,6 +169,14 @@ button {
   <input type="text" id="input" name="input"><br><br>
   <button onclick="saveTextAsFile()">Save</button>
 </form>
+<form id="reminder-form">
+        <label for="reminder-text">Reminder:</label>
+        <input type="text" id="reminder-text" name="reminder-text" required>
+        <label for="reminder-delay">Delay (in minutes):</label>
+        <input type="number" id="reminder-delay" name="reminder-delay" required>
+        <button type="submit">Add Reminder</button>
+    </form>
+    <ul id="reminder-list"></ul>
 </div>
 <script>
 var select = document.getElementById("mySelect");
@@ -276,6 +294,45 @@ function saveTextAsFile() {
 function destroyClickedElement(event) {
   document.body.removeChild(event.target);
 }
+const reminders = [];
+
+function addReminder(reminderText, delayInMinutes) {
+        const delayInMilliseconds = delayInMinutes * 60 * 1000;
+        const timeoutId = setTimeout(() => {
+        const reminderElement = document.getElementById('reminder-' + timeoutId);
+        if (reminderElement) {
+                reminderElement.classList.add('reminder-item--triggered');
+                reminderElement.innerText += ' - Reminder!';
+                if (window.confirm("Do you want to keep this reminder?")) {
+                // Keep the reminder
+                } else {
+                // Remove the reminder
+                cancelReminder(timeoutId);
+                }
+        }
+        }, delayInMilliseconds);
+
+        reminders.push({ reminderText, timeoutId });
+
+        const reminderElement = document.createElement('li');
+        reminderElement.id = 'reminder-' + timeoutId;
+        reminderElement.className = 'reminder-item';
+        reminderElement.innerText = reminderText;
+        document.getElementById('reminder-list').appendChild(reminderElement);
+        }
+
+function cancelReminder(timeoutId) {
+        clearTimeout(timeoutId);
+        const reminderElement = document.getElementById('reminder-' + timeoutId);
+        if (reminderElement) {
+        reminderElement.parentNode.removeChild(reminderElement);
+        }
+}
+
+document.getElementById('reminder-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        addReminder(event.target['reminder-text'].value, event.target['reminder-delay'].value);
+});
 </script>
 </body>
 </html>
