@@ -25,7 +25,7 @@ body {
 	position: absolute;
 	top: 5%;
 	align-items: center;
-	font-size: 4rem;
+	font-size: 3.5rem;
 	margin: 0;
 }
 
@@ -295,43 +295,51 @@ function destroyClickedElement(event) {
   document.body.removeChild(event.target);
 }
 const reminders = [];
-
 function addReminder(reminderText, delayInMinutes) {
-        const delayInMilliseconds = delayInMinutes * 60 * 1000;
-        const timeoutId = setTimeout(() => {
-        const reminderElement = document.getElementById('reminder-' + timeoutId);
-        if (reminderElement) {
-                reminderElement.classList.add('reminder-item--triggered');
-                reminderElement.innerText += ' - Reminder!';
-                if (window.confirm("Do you want to keep this reminder?")) {
-                // Keep the reminder
-                } else {
-                // Remove the reminder
-                cancelReminder(timeoutId);
-                }
-        }
-        }, delayInMilliseconds);
+    const delayInMilliseconds = delayInMinutes * 60 * 1000;
+    const timeoutId = setTimeout(() => {
+	const reminderElement = document.getElementById('reminder-' + timeoutId);
+	if (reminderElement) {
+	    reminderElement.classList.add('reminder-item--triggered');
+	    reminderElement.innerText += ' - Reminder!';
+	    if (window.confirm(`Do you want to keep this reminder? "${reminderText}"`)) {
+		// Keep the reminder
+	    } else {
+		// Remove the reminder
+		cancelReminder(timeoutId);
+	    }
+	}
+    }, delayInMilliseconds);
 
-        reminders.push({ reminderText, timeoutId });
+    reminders.push({ reminderText, timeoutId });
 
-        const reminderElement = document.createElement('li');
-        reminderElement.id = 'reminder-' + timeoutId;
-        reminderElement.className = 'reminder-item';
-        reminderElement.innerText = reminderText;
-        document.getElementById('reminder-list').appendChild(reminderElement);
-        }
+    const reminderElement = document.createElement('li');
+    reminderElement.id = 'reminder-' + timeoutId;
+    reminderElement.className = 'reminder-item';
+    reminderElement.innerText = reminderText;
+
+    // Add a button to remove the reminder
+    const removeButton = document.createElement('button');
+    removeButton.innerText = 'Remove';
+    removeButton.addEventListener('click', () => {
+	cancelReminder(timeoutId);
+    });
+    reminderElement.appendChild(removeButton);
+
+    document.getElementById('reminder-list').appendChild(reminderElement);
+}
 
 function cancelReminder(timeoutId) {
-        clearTimeout(timeoutId);
-        const reminderElement = document.getElementById('reminder-' + timeoutId);
-        if (reminderElement) {
-        reminderElement.parentNode.removeChild(reminderElement);
-        }
+    clearTimeout(timeoutId);
+    const reminderElement = document.getElementById('reminder-' + timeoutId);
+    if (reminderElement) {
+	reminderElement.parentNode.removeChild(reminderElement);
+    }
 }
 
 document.getElementById('reminder-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        addReminder(event.target['reminder-text'].value, event.target['reminder-delay'].value);
+    event.preventDefault();
+    addReminder(event.target['reminder-text'].value, event.target['reminder-delay'].value);
 });
 </script>
 </body>
