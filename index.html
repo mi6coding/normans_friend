@@ -7,9 +7,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap');
 body {
-  display: static;
- 
-  
+  display: static;  
   text-align: center;
   height: 100vh;
   margin: 0;
@@ -66,7 +64,7 @@ body {
 .input-container {
   display: flex;
   justify-content: space-between;
-  width: 40%;
+  width: 60%;
   margin: 10px 10px;
 }
 
@@ -97,41 +95,61 @@ select, input, button {
   font-size: 18px;
   border-radius: 50%;
 }
-#increaseFont{
+
+#increaseFont {
 	margin: 10px 10px;
 	}
-#decreaseFont{
+	
+#decreaseFont {
 	margin: 10px 10px;
 	}
+	
 #itemInput {
-	width: 50%
+	width: 70%
 	}
+	
 button {
     background-color: rgba(255,105,0,1);
+	transition-duration: 0.4s;
+	cursor: pointer;
+	height: 40px;
+	text-align: center;
 	}
+	
+button:hover {
+    background-color: rgb(2,3,129);
+	color: white;
+}
 
 #reminder-list {
 	position: static;
     list-style-type: none;
     padding: 0;
         }
+		
 .reminder-item {
     margin: 10px 0;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     }
-.remind{
+	
+.remind {
 	display:flex;
 	flex-direction:row;
 	margin: 30px 10px;
 	}
 
-.saveAs{
+.saveAs {
 	display:flex;
 	flex-direction:row;
 	margin: 10px;
 	}
+	
+#input {
+	width:50%;
+	}
+	
 </style>
 </head>
 <body>
@@ -145,13 +163,12 @@ button {
 </div>
 <div class="callscript">
 <select id="mySelect" multiple>
-	<option value="1">👉 Good day ..How are you?[ Just click on each line in order to highlight it! ]</option>
-	<option value="2">We are calling on behalf of... from The Nimble group.</option>
-	<option value="3">Confirm full name.. { This call is recorded for your own protection }</option>
-	<option value="4">and You are speaking to.. one of the resolution consultants</option>
-	<option value="4">Your account has been allocated to me and the reason for this call..</option>
-	<option value="5">Unfortunately your __account still has an outstanding balance</option>
-	<option value="6">And we want you to be debt_free and clear your name from the credit_bureau ...ASAP</option>
+	<option value="1">👉 Good day [ Client's name ] My name is [ Your name ]</option>
+	<option value="2">I am a Resolution Consultant from the Nimble Group</option>
+	<option value="3">Your [ company_name ] account has been allocated to me today</option>
+	<option value="4">{ This call is recorded for your own protection }</option>	
+	<option value="5">Now unfortunately your __account still has an outstanding balance</option>
+	<option value="6">Of course you want you to be debt_free and clear your name from the credit_bureau ...ASAP</option>
 	<option value="7">👉 [ use Norman PI ] [ !get date of birth, !Balance ]</option>
 	<option value="8">So, just to understand your situation better & help you find a solution to this</option>
 	<option value="9">What is making it difficult for you to settle [ arrangements, payments ]?</option>
@@ -172,8 +189,8 @@ button {
 <div>
 <div class="input-container">
 <input type="text" id="itemInput" placeholder="Enter item text">
-<button id="addItem">Add Item</button>
-<button id="deleteItem">Delete Item</button>
+<button id="addItem">+ Item</button>
+<button id="deleteItem">- Item</button>
 </div>
 <form class="saveAs">
   <label for="input">Enter text:</label>
@@ -184,9 +201,9 @@ button {
 <h1>Reminder</h1>
    <form id="reminder-form">
     <input type="text" name="reminder-text" placeholder="Reminder Text">
-    <input type="number" name="reminder-delay" placeholder="Delay (in milliseconds)">
+    <input type="number" name="reminder-delay" placeholder="Delay (in minutes)" step="any">
     <button type="submit">Add Reminder</button>
-	</form>	
+</form>
 <div>
 <button id="remove-button">Remove</button>
 <ul id="reminder-list"></ul>
@@ -267,6 +284,13 @@ document.getElementById("resetSelect").addEventListener("click", function() {
 });
 function saveTextAsFile() {
   var textToSave = document.getElementById("input").value;
+  var words = textToSave.split(' ');
+
+  if(words.length < 10) {
+    alert('Please enter at least 10 words.');
+    return;
+  }
+
   var textToSaveAsBlob = new Blob([textToSave], {type:"text/plain"});
   var textToSaveAsURL = window.URL.createObjectURL(textToSaveAsBlob);
   var fileNameToSaveAs = "input.txt";
@@ -285,27 +309,36 @@ function saveTextAsFile() {
 function destroyClickedElement(event) {
   document.body.removeChild(event.target);
 }
+
 const reminders = {}; 
 
-function addReminder(reminderText, delayInMilliseconds) {
+function addReminder(reminderText, delayInMinutes) {
+    const delayInMilliseconds = delayInMinutes * 60 * 1000;
     const timeoutId = setTimeout(() => {
         const reminderElement = document.getElementById('reminder-' + timeoutId);
         if (reminderElement) {
             reminderElement.classList.add('reminder-item--triggered');
             reminderElement.innerText += ' - Reminder!';
+            alert(reminderText); // This line will trigger an alert with the reminder text
         }
     }, delayInMilliseconds);
-    reminders[timeoutId] = { reminderText, timeoutId };
+    reminders[timeoutId] = { reminderText, timeoutId, countdown: delayInMilliseconds / 1000 };
     const reminderElement = document.createElement('li');
     reminderElement.id = 'reminder-' + timeoutId;
     reminderElement.className = 'reminder-item';
-    reminderElement.innerText = reminderText;
+    reminderElement.innerText = reminderText + ' - Countdown: ' + reminders[timeoutId].countdown + ' seconds';
     const removeButton = document.createElement('button');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', () => cancelReminder(timeoutId));
     reminderElement.appendChild(removeButton);
     document.getElementById('reminder-list').appendChild(reminderElement);
+    const countdownInterval = setInterval(() => {
+        reminders[timeoutId].countdown--;
+        reminderElement.innerText = reminderText + ' - Countdown: ' + reminders[timeoutId].countdown + ' seconds';
+        if (reminders[timeoutId].countdown <= 0) clearInterval(countdownInterval);
+    }, 1000);
 }
+
 function cancelReminder(timeoutId) {
    clearTimeout(timeoutId);
     const reminderElement = document.getElementById('reminder-' + timeoutId);
@@ -314,10 +347,17 @@ function cancelReminder(timeoutId) {
     }
     delete reminders[timeoutId];
 }
+
 document.getElementById('reminder-form').addEventListener('submit', function(event) {
     event.preventDefault();
-    addReminder(event.target['reminder-text'].value, Number(event.target['reminder-delay'].value));
+    const delay = parseFloat(event.target['reminder-delay'].value);
+    if (isNaN(delay)) {
+        alert('Please enter a valid number for the delay.');
+    } else {
+        addReminder(event.target['reminder-text'].value, delay);
+    }
 });
+
 document.getElementById('remove-button').addEventListener('click', function() {
     if (Object.keys(reminders).length > 0) {
         const lastTimeoutId = Object.keys(reminders)[Object.keys(reminders).length - 1];
