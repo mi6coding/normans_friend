@@ -7,10 +7,10 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Edu+TAS+Beginner&display=swap');
 body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  display: static;
+ 
+  
+  text-align: center;
   height: 100vh;
   margin: 0;
   background-image: url('https://www.transparenttextures.com/patterns/diagonal-striped-brick.png');
@@ -18,40 +18,55 @@ body {
   background-blend-mode: lighten;
   color: var(--text-color);
   font-family: 'Edu TAS Beginner', cursive;
-  padding: 10px; /* Add padding to the body */
+  padding: 20px; /* Add padding to the body */
 }
 
+	
 .topscreen {
-	position: absolute;
-	top: 5%;
-	align-items: center;
-	font-size: 3.5rem;
-	margin: 0;
+	top: 1px;
+	position: relative;
+	text-align: center;
+	font-size: 5rem;
+	margin-bottom: 30px;
+	opacity: 0.9;
 }
+
+.breakdance-image-object{
+	position: static;
+	object-fit: 100%;
+	height: 12%;
+	width: 20%;
+	opacity: 0.9;
+	margin-bottom: 0;
+	}
 
 .fontrow{
 	display:flex;
 	flex-direction:row;
+	margin: 30px;
 	}
 	
-.fontrow #resetBtn{
-	background-color: rgb(2,3,129);
-	color: white;
+.callscript{
+	width: 100%;
+	height: 70%;
 	}
 	
 #mySelect {
-  width: 100%;
-  height: 95%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 70%;
+	height:100%;
 }
 
 .select-container button {
-	display:flex;
+	display:static;
 }
 
 .input-container {
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 40%;
   margin: 10px 10px;
 }
 
@@ -61,6 +76,8 @@ select, input, button {
   border-radius: 5px;
   margin: 10px 10px;
 }
+
+
 /* Default to light mode */
 :root {
     --bg-color: "light blue";
@@ -83,56 +100,50 @@ select, input, button {
 #increaseFont{
 	margin: 10px 10px;
 	}
-	
 #decreaseFont{
 	margin: 10px 10px;
 	}
-	
 #itemInput {
 	width: 50%
 	}
-	
 button {
     background-color: rgba(255,105,0,1);
 	}
 
-.breakdance-image-object{
-		position: absolute;
-		top: 15%;
-		height: 13%;
-		width:25%;
-		margin-top: 5px;
-		margin-bottom: 5px;
-		padding-top: 0;
-		}
+#reminder-list {
+	position: static;
+    list-style-type: none;
+    padding: 0;
+        }
+.reminder-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    }
+.remind{
+	display:flex;
+	flex-direction:row;
+	margin: 30px 10px;
+	}
+
 .saveAs{
 	display:flex;
 	flex-direction:row;
 	margin: 10px;
 	}
-#reminder-list {
-            list-style-type: none;
-            padding: 0;
-        }
-.reminder-item {
-        margin: 10px 0;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-}
 </style>
 </head>
 <body>
 <button id="darkModeToggle">Dark</button> <!-- Moved to top left corner -->
+<img class="breakdance-image-object" src="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png" width="600" height="200" alt="Nimble Group" srcset="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png 600w, https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white-300x114.png 300w" sizes="(max-width: 600px) 100vw, 600px">
 <h1 class="topscreen">Normans Friend</h1>
-<img class="breakdance-image-object" src="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png" width="600" height="227" alt="Nimble Group" srcset="https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white.png 600w, https://nimblegroup.co.za/wp-content/uploads/2023/08/logo-nimble-group-white-300x114.png 300w" sizes="(max-width: 600px) 100vw, 600px">
-
-<div class="select-container">
 <div class="fontrow">
 <button id="increaseFont">+</button> <!-- Placed next to each other -->
 <button id="decreaseFont">-</button>
-<button id="resetBtn">Reset</button>
+<button id="resetSelect">Reset</button>
 </div>
+<div class="callscript">
 <select id="mySelect" multiple>
 	<option value="1">👉 Good day ..How are you?[ Just click on each line in order to highlight it! ]</option>
 	<option value="2">We are calling on behalf of... from The Nimble group.</option>
@@ -158,7 +169,7 @@ button {
 	<option value="21">Update history-notes on system</option>
 	<option value="22">Any questions from your side?</option>
 </select>
-
+<div>
 <div class="input-container">
 <input type="text" id="itemInput" placeholder="Enter item text">
 <button id="addItem">Add Item</button>
@@ -169,14 +180,16 @@ button {
   <input type="text" id="input" name="input"><br><br>
   <button onclick="saveTextAsFile()">Save</button>
 </form>
-<form id="reminder-form">
+<div class="remind">
+<h1>Reminder</h1>
+   <form id="reminder-form">
     <input type="text" name="reminder-text" placeholder="Reminder Text">
     <input type="number" name="reminder-delay" placeholder="Delay (in milliseconds)">
     <button type="submit">Add Reminder</button>
-</form>
-<button id="remove-button">Remove Last Reminder</button>
+	</form>	
+<div>
+<button id="remove-button">Remove</button>
 <ul id="reminder-list"></ul>
-</div>
 <script>
 var select = document.getElementById("mySelect");
 
@@ -207,27 +220,6 @@ function updateOptions() {
 }
 
 updateOptions();
-
-var select = document.getElementById("mySelect");
-
-select.addEventListener("scroll", function() {
-    var scrollTop = select.scrollTop;
-    var scrollHeight = select.scrollHeight;
-    var clientHeight = select.clientHeight;
-
-    if (scrollTop === 0) {
-        select.scrollTop = 1;
-    } else if (scrollTop + clientHeight === scrollHeight) {
-        select.scrollTop = scrollHeight - clientHeight - 1;
-    } else {
-        select.scrollTop = scrollTop;
-    }
-});
-
-select.addEventListener("click", function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-});
 
 document.getElementById("darkModeToggle").addEventListener("click", function() {
     var currentTheme = document.documentElement.getAttribute("data-theme");
@@ -268,7 +260,7 @@ document.getElementById("deleteItem").addEventListener("click", function() {
     });
 });
 
-document.getElementById("resetBtn").addEventListener("click", function() {
+document.getElementById("resetSelect").addEventListener("click", function() {
     Array.from(select.options).forEach(function(option) {
         option.selected = false;
     });
